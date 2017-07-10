@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>一级和二级的全选和全不选</title>
+	<script src="js/jquery-2.0.0.min.js"></script>
+	<script src="js/layer.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/layer.css">
+    <style type="text/css">
+    input {
+        color: blue;
+    }
+        input[type="date"]:before {
+            content: attr(placeholder);
+            color: red;
+        }
+        input:: input-placeholder {
+            color: #69f;
+        }
+        input::-webkit-input-placeholder { /* WebKit browsers */ 
+        color: #69f; 
+        } 
+        input :-moz-placeholder { /* Mozilla Firefox 4 to 18 */ 
+        color: #69f; 
+        } 
+        input::-moz-placeholder { /* Mozilla Firefox 19+ */ 
+        color: #69f; 
+        } 
+        input:-ms-input-placeholder { /* Internet Explorer 10+ */ 
+        color: #69f; 
+        }
+        .checkall_02 {
+          margin-left: 16px;
+        }
+        .checkonebox01 {
+          margin-left: 16px;
+        }
+        .msg_box {
+          width: 162px;
+          height: 42px;
+          line-height: 42px;
+          margin-left: 800px;
+          
+        }
+        .msg {
+          width: 160px;
+          margin-top: 0;
+          border: 1px solid #eee;
+          height: 40px;
+          line-height: 40px;
+          color: red;
+          font-size: 14px;
+          text-align: center;
+          display: none;
+        }
+        .cartpaybtn {
+          width: 162px;
+          background-color: #bbb;
+          height: 40px;
+          line-height: 40px;
+          color: #fff;
+          font-size: 18px;
+          text-align: center;
+          border: none;
+        }
+        .num_box {
+          width: 200px;
+          height: 40px;
+          line-height: 40px;
+          display: inline-block;
+          margin-left: 60px;
+           border: 1px solid #ccc;
+           background-color: #fff;
+        }
+        .reduce {
+          width: 38px;
+          height: 39px;
+          float: left;
+          line-height: 39px;
+          text-align: center;
+          border-right: 1px solid #ccc;
+          font-size: 14px;
+          color: #333;
+          cursor: pointer;
+        }
+        .num {
+          width: 120px;
+          height: 38px;
+          border: none;
+          float: left;
+          text-align: center;
+          border-right: 1px solid #ccc;
+          font-size: 14px;
+          color: #333;
+          
+        }
+        .add {
+          width: 38px;
+          height: 39px;
+          float: left;
+          line-height: 39px;
+          text-align: center;
+          font-size: 14px;
+          color: #333;
+          cursor: pointer;
+        }
+        input[type=number]::-webkit-inner-spin-button,     
+        input[type=number]::-webkit-outer-spin-button {    
+            -webkit-appearance: none;    
+            appearance: none;    
+            margin: 0;    
+        }
+        .active {
+          background-color: #69f;
+        }
+    </style>
+</head>
+<body>
+	<form id="form1" runat="server">
+    <div>   
+      <div class="checkallbox">
+          <input type="checkbox" name="checkAll" class='checkAll' id="checkAll" onclick="checkall(this, '.checkOne')">
+          <label class="ck_all" for="checkAll">checkAll</label>
+      </div>
+      <br><br>
+      <div class="checkonebox">
+        <input type="checkbox" name="checkOne" class='checkOne' id="checkOne1">
+        <label class="ck_one" for="checkOne">checkOne</label>
+      </div>
+      <div class="checkonebox">
+        <input type="checkbox" name="checkOne" class='checkOne' id="checkOne2">
+        <label class="ck_one" for="checkOne">checkOne</label>
+      </div>
+      <div class="checkonebox">
+        <input type="checkbox" name="checkOne" class='checkOne' id="checkOne3">
+        <label class="ck_one" for="checkOne">checkOne</label>
+      </div>
+    </div>
+    <hr><hr>
+    <!-- 有二级的全选 -->
+    <div class="check_box">
+      <div class="checkall_01">
+        <input type="checkbox" name="checkAll01" class='checkAll01' id="checkAll01" onclick="checkall01(this,'.checkAll01','.checkAll02','.checkOne01')">
+        <label class="ck_all" for="checkAll01">全选一级</label>
+      </div><hr>
+
+      <div class="checkall_02">
+        <input type="checkbox" name="checkAll02" class='checkAll02' id="checkAll02">
+        <label class="ck_all" for="checkAll02">全选二级</label>
+        <div class="checkonebox01">
+          <input type="checkbox" name="checkOne01" class='checkOne01' id="checkOne01" data-price="100" data-qty="" >
+          <label class="ck_one01" for="checkOne01">单选</label>
+          <span class="num_box">
+            <span class="reduce">-</span>
+            <input type="number" name="number" class="num" value="3" id="num1">
+            <span class="add">+</span>
+          </span>
+          <span class="price" style="margin-left: 200px"></span>
+        </div>
+        <div class="checkonebox01">
+          <input type="checkbox" name="checkOne01" class='checkOne01' id="checkOne01" data-price="100" data-qty="">
+          <label class="ck_one01" for="checkOne01">单选</label>
+          <span class="num_box">
+            <span class="reduce">-</span>
+            <input type="number" name="number" class="num" value="6" id="num2">
+            <span class="add">+</span>
+          </span>
+          <span class="price" style="margin-left: 200px"></span>
+        </div>
+        <div class="checkonebox01">
+          <input type="checkbox" name="checkOne01" class='checkOne01' id="checkOne01" data-price="100" data-qty="">
+          <label class="ck_one01" for="checkOne01">单选</label>
+          <span class="num_box">
+            <span class="reduce">-</span>
+            <input type="number" name="number" class="num" value="2" id="num3">
+            <span class="add">+</span>
+          </span>
+          <span class="price" style="margin-left: 200px"></span>
+        </div>
+      </div>
+      <div class="checkall_02">
+        <input type="checkbox" name="checkAll02" class='checkAll02' id="checkAll02">
+        <label class="ck_all" for="checkAll02">全选二级</label>
+        <div class="checkonebox01">
+          <input type="checkbox" name="checkOne01" class='checkOne01' id="checkOne01" data-price="100" data-qty="">
+          <label class="ck_one01" for="checkOne01">单选</label>
+          <span class="num_box">
+            <span class="reduce">-</span>
+            <input type="number" name="number" class="num" value="8" id="num4">
+            <span class="add">+</span>
+          </span>
+          <span class="price" style="margin-left: 200px"></span>
+        </div>
+        <div class="checkonebox01">
+          <input type="checkbox" name="checkOne01" class='checkOne01' id="checkOne01" data-price="100" data-qty="" >
+          <label class="ck_one01" for="checkOne01">单选</label>
+          <span class="num_box">
+            <span class="reduce">-</span>
+            <input type="number" name="number" class="num" value="6" id="num5">
+            <span class="add">+</span>
+          </span>
+          <span class="price" style="margin-left: 200px"></span>
+        </div>
+        <div class="checkonebox01">
+          <input type="checkbox" name="checkOne01" class='checkOne01' id="checkOne01" data-price="100" data-qty="">
+          <label class="ck_one01" for="checkOne01">单选</label>
+          <span class="num_box">
+            <span class="reduce">-</span>
+            <input type="number" name="number" class="num" value="8" id="num6">
+            <span class="add">+</span>
+          </span>
+          <span class="price" style="margin-left: 200px"></span>
+        </div>
+      </div><hr>
+      <div class="checkall_01">
+        <input type="checkbox" name="checkAll01" class='checkAll01' id="checkAll01" onclick="checkall01(this,'.checkAll01','.checkAll02','.checkOne01')">
+        <label class="ck_all" for="checkAll01">全选一级</label>
+      </div>
+    </div>
+    <br><br>
+    <div class="msg_box"><p class="msg">请先选择一个商品</p></div>
+    <div class="num_total">
+      <span>已选择：<span class="check_num" style="color:red">0</span>件商品</span>
+       <span style="margin-left: 200px">总价：<span class="check_pay" style="color:red">0.00</span>元</span>
+    </div>
+    <button type="submit" class="cartpaybtn" style="margin-left: 800px">结算</button>
+   </form>
+</body>
+<script>
+//只有一级的全选
+  function checkall(obj, subsell) {
+    $(subsell).each(function() {
+      $(subsell).prop("checked", $(obj).prop("checked"));
+    });
+  }
+  var my_check_one = $(".checkOne");  //单个按钮
+  var my_check_all = $(".checkAll");  //全选按钮
+  my_check_one.click(function() {
+    
+      if(!$(this).prop("checked")) {
+          my_check_all.prop("checked",false);
+      }
+      var flag=true;
+      my_check_one.each(function() {
+          if(!$(this).prop("checked")) {
+              flag =false;
+          }
+      });
+      if(flag) {
+          my_check_all.prop("checked",true);
+      }
+  });
+//有二级的全选
+  function checkall01(obj,subselall,subselall2, subselone) {
+    $(subselall).each(function() {
+      $(subselall).prop("checked",$(obj).prop("checked"));
+    });
+    $(subselall2).each(function() {
+      $(subselall2).prop("checked",$(subselall).prop("checked"));
+    });
+    $(subselone).each(function() {
+      $(subselone).prop("checked",$(subselall2).prop("checked"));
+    });
+    if(checkproduct()){
+      $('.cartpaybtn').addClass("active");
+    }else {
+       $('.cartpaybtn').removeClass("active");
+    }
+    funsum();
+  }
+
+  $('#form1').on('click', 'input[name="checkAll02"]', function() {
+    var ocheckall01 = $('input[name="checkAll01"]');
+    var ocheckall02 = $('input[name="checkAll02"]');
+    var ocheckone01 = $(this).parents('.checkall_02').find('input[name="checkOne01"]');
+    flag = true;
+    if(!$(this).prop("checked")) {
+      ocheckall01.prop("checked", false);
+      ocheckone01.prop("checked", false);
+    }else {
+      ocheckone01.prop("checked", true);
+    }
+
+    ocheckall02.each(function() {
+      if(!$(this).prop("checked")) {
+        flag = false;
+        return false;
+      }
+    });
+    if(flag) {
+      ocheckall01.prop("checked", true);
+    }
+    if(checkproduct()){
+      $('.cartpaybtn').addClass("active");
+    }else {
+       $('.cartpaybtn').removeClass("active");
+    }
+    funsum();
+  });
+
+ $('#form1').on('click', 'input[name="checkOne01"]', function() {
+  var ocheck = $(this).parents('.checkall_02');
+  var ocheckone01 = ocheck.find('input[name="checkOne01"]');
+  var ocheckall02 = ocheck.find('input[name="checkAll02"]');
+  var ocheckone011 = $('#form1').find('input[name="checkOne01"]');
+  var ocheckall011 = $('input[name="checkAll01"]');
+  var ocheckall022 = $('input[name="checkAll02"]');
+  var flag = true;
+  var flagAll = true;
+
+  if(!$(this).prop("checked")) {
+    ocheckall02.prop("checked", false);
+    ocheckall011.prop("checked", false);
+  }
+  ocheckone01.each(function() {
+    if(!$(this).prop("checked")) {
+      flag = false;
+      return false;
+    }
+  });
+  if(flag) {
+    ocheckall02.prop("checked", true);
+  }
+  flag = true;
+  ocheckone011.each(function() {
+    if(!$(this).prop("checked")) {
+      flag = false;
+      return false;
+    }
+  });
+
+  if(flag) {
+    ocheckall02.prop("checked", true);
+    ocheckall022.each(function() {
+      if(!$(this).prop("checked")) {
+        flagAll = false;
+        return false;
+      }
+    });
+    if(flagAll) {
+      ocheckall011.prop("checked", true);
+    }
+  }
+  if(checkproduct()){
+    $('.cartpaybtn').addClass("active");
+  }else {
+    $('.cartpaybtn').removeClass("active");
+  }
+  funsum();
+
+ });
+
+//如果有商品被选中
+  function checkproduct() {
+    var checkpro = $('input[name="checkOne01"]:checked');
+    if(checkpro.length > 0) {
+      return true;
+    }else {
+      return false;
+    }
+  }
+//点击 结算 按钮
+  $('.cartpaybtn').on('click', function() {
+    if(checkproduct()) {
+      $(this).attr("type", "submit");
+    }else {
+      $('.msg').show();
+    }
+  });
+//购物车订单数量加减
+  $('.reduce').on('click', function() {
+    var reduce1 = $(this).siblings('.num');
+    var pricebox = $(this).parent().siblings('.checkOne01');
+    var unitprice = $(this).parent().siblings('.price');
+    var price = 0;
+    reduce1.val(parseInt(reduce1.val())-1);
+    if(parseInt(reduce1.val()) < 1) {
+      reduce1.val(1);
+      layer.msg('数量至少为1！', {icon: 7});
+    }
+    funsum();
+    funprice();
+  });
+
+  $('.add').on('click', function() {
+    var add1 = $(this).siblings('.num');
+    var pricebox = $(this).parent().siblings('.checkOne01');
+    var unitprice = $(this).parent().siblings('.price');
+    var price = 0;
+    add1.val(parseInt(add1.val())+1);
+    funsum();
+    funprice();
+  });
+  
+//计算 总商品数量 和 总价
+  function funsum() {
+    var o = $('#form1').find('input[name="checkOne01"]:checked').siblings('.num_box').find('input');
+    if(o.length <= 0) {
+      $('.check_pay').html('0.00');
+      $('.check_num').html('0');
+    } else {
+      var money = 0;
+      var qty = 0;
+      $.each(o, function(index,value) {
+        var $that = $(value);
+        var count = ($that.val() / 1) || 0;
+        qty += count;
+        money += (($that.parent().siblings('#checkOne01').data('price') / 1) || 0) * count;
+      });
+      $('.check_pay').html(money);
+      $('.check_num').html(qty);
+    }
+  }
+    //计算某一种商品的价格
+    function funprice() {
+      var perprice = 0;
+      var pnumbox = $('.num');  
+     pnumbox.each(function() {
+        var pnum =  $(this).val();
+        var pprice = $(this).parent().siblings('.checkOne01').attr('data-price');
+        if(pprice != '' && pnum != '') {
+          var perprice = parseFloat(pnum) * parseFloat(pprice);
+          $(this).parent().siblings('.price').html(perprice.toFixed(2)); 
+        }
+      });
+     funsum();
+    }
+    funprice();   //调用函数
+
+
+    //localstorage练习
+    var storage = window.localStorage;
+    for(var i=0, len=storage.length; i<len; i++) {
+      var key =storage.key(i);
+      var value = storage.getItem(key);
+      console.log(key + "=" +value);
+    }
+    if(window.addEventListener){ 
+    window.addEventListener("storage",handle_storage,false); 
+    }
+    else if(window.attachEvent)
+    { 
+    window.attachEvent("onstorage",handle_storage); 
+    } 
+    function handle_storage(e){
+    if(!e){e=window.event;} 
+    }
+
+  var storag = window.localStorage; storag.key1 = "hello"; 
+  storag["key2"] = "world"; 
+  console.log(storag.key1); 
+  console.log(storag.key2);
+  
+
+
+
+  
+  
+
+</script>
+</html>
